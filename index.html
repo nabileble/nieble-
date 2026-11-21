@@ -180,6 +180,15 @@ button:hover{transform:translateY(-2px);filter:brightness(1.05)}
 .saved-text{white-space:pre-wrap;overflow-wrap:anywhere}
 .empty{color:var(--muted);font-style:italic}
 
+/* ===== Formulir Google (Tugas 2) ===== */
+.form-frame{border-radius:16px;overflow:hidden;border:2px solid var(--line);background:#fff}
+.form-frame iframe{display:block;width:100%;height:min(1100px,80vh);min-height:560px;border:0}
+.btn-link{
+  display:inline-block;text-decoration:none;font-weight:800;padding:12px 22px;border-radius:14px;
+  background:var(--accent);color:#fff;transition:transform .15s,filter .2s;
+}
+.btn-link:hover{transform:translateY(-2px);filter:brightness(1.05)}
+
 @media (max-width:880px){
   .wrap{grid-template-columns:1fr}
   .profile{position:relative;top:auto}
@@ -228,13 +237,13 @@ button:hover{transform:translateY(-2px);filter:brightness(1.05)}
       <a class="task" href="#tugas2">
         <div class="num">2</div>
         <h2>Tugas 2</h2>
-        <p>Halaman yang bisa diisi dan disimpan.</p>
+        <p>Formulir Google dan spreadsheet.</p>
         <span class="go">Buka tugas →</span>
       </a>
       <a class="task" href="#tugas3">
         <div class="num">3</div>
         <h2>Tugas 3</h2>
-        <p>Halaman yang bisa diisi dan disimpan.</p>
+        <p>Formulir Google dan spreadsheet.</p>
         <span class="go">Buka tugas →</span>
       </a>
       <a class="task" href="#tugas4">
@@ -318,9 +327,69 @@ button:hover{transform:translateY(-2px);filter:brightness(1.05)}
     </div>
   </div>
 
-  <!-- ================= TUGAS 2, 3, 4 (dibuat otomatis oleh script di bawah) ================= -->
-  <div class="view" id="tugas2" data-form="2"></div>
-  <div class="view" id="tugas3" data-form="3"></div>
+  <!-- ================= TUGAS 2 : FORMULIR & SPREADSHEET GOOGLE ================= -->
+  <div class="view" id="tugas2">
+    <div class="page">
+      <h1 class="page-title">Tugas 2</h1>
+      <p class="lead">Silakan isi formulir dan lihat spreadsheet di bawah ini. Kalau ada yang tidak tampil, buka lewat tombol "Buka di tab baru".</p>
+      <section class="card">
+        <h2>Formulir</h2>
+        <div class="form-frame">
+          <iframe
+            src="https://docs.google.com/forms/d/e/1FAIpQLSe25QR_QXUrcxw6arvv1zUIwwWgkYU0doPOa0HZB5MjopwPeQ/viewform?embedded=true"
+            title="Formulir Tugas 2" loading="lazy">Memuat formulir…</iframe>
+        </div>
+        <div class="actions">
+          <a class="btn-link" href="https://docs.google.com/forms/d/e/1FAIpQLSe25QR_QXUrcxw6arvv1zUIwwWgkYU0doPOa0HZB5MjopwPeQ/viewform" target="_blank" rel="noopener">↗ Buka di tab baru</a>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Spreadsheet</h2>
+        <div class="form-frame">
+          <iframe
+            src="https://docs.google.com/spreadsheets/d/1-h4OhaVVb27m4gCwgPlOAt5IihLb1OzQ9I0ttw5GDzg/edit?usp=sharing&rm=minimal"
+            title="Spreadsheet Tugas 2" loading="lazy">Memuat spreadsheet…</iframe>
+        </div>
+        <div class="actions">
+          <a class="btn-link" href="https://docs.google.com/spreadsheets/d/1-h4OhaVVb27m4gCwgPlOAt5IihLb1OzQ9I0ttw5GDzg/edit?usp=drivesdk" target="_blank" rel="noopener">↗ Buka spreadsheet di tab baru</a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ================= TUGAS 3 : FORMULIR GOOGLE ================= -->
+  <div class="view" id="tugas3">
+    <div class="page">
+      <h1 class="page-title">Tugas 3</h1>
+      <p class="lead">Silakan isi formulir dan lihat spreadsheet di bawah ini. Kalau ada yang tidak tampil, buka lewat tombol "Buka di tab baru".</p>
+      <section class="card">
+        <h2>Formulir</h2>
+        <div class="form-frame">
+          <iframe
+            src="https://docs.google.com/forms/d/e/1FAIpQLScdTTd__SX86pz2sPiV68AiHYEENOTv_6Qo2_SKuinnrAj-ZQ/viewform?embedded=true"
+            title="Formulir Tugas 3" loading="lazy">Memuat formulir…</iframe>
+        </div>
+        <div class="actions">
+          <a class="btn-link" href="https://docs.google.com/forms/d/e/1FAIpQLScdTTd__SX86pz2sPiV68AiHYEENOTv_6Qo2_SKuinnrAj-ZQ/viewform" target="_blank" rel="noopener">↗ Buka di tab baru</a>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Spreadsheet</h2>
+        <div class="form-frame">
+          <iframe
+            src="https://docs.google.com/spreadsheets/d/1PNFOlpKWtycHdAseB4kciGKVa-My4BOJ44k_Ti-s_54/edit?usp=sharing&rm=minimal&gid=2045235048#gid=2045235048"
+            title="Spreadsheet Tugas 3" loading="lazy">Memuat spreadsheet…</iframe>
+        </div>
+        <div class="actions">
+          <a class="btn-link" href="https://docs.google.com/spreadsheets/d/1PNFOlpKWtycHdAseB4kciGKVa-My4BOJ44k_Ti-s_54/edit?resourcekey=&gid=2045235048#gid=2045235048" target="_blank" rel="noopener">↗ Buka spreadsheet di tab baru</a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ================= TUGAS 4 (dibuat otomatis oleh script di bawah) ================= -->
   <div class="view" id="tugas4" data-form="4"></div>
 
 </main>
@@ -329,7 +398,7 @@ button:hover{transform:translateY(-2px);filter:brightness(1.05)}
 
 <script>
 (function () {
-  /* ---------- Form isi & simpan untuk Tugas 2-4 ---------- */
+  /* ---------- Form isi & simpan untuk Tugas 4 ---------- */
   function buildForm(box) {
     var n = box.getAttribute('data-form');
     var key = 'tugas' + n;
@@ -418,7 +487,7 @@ button:hover{transform:translateY(-2px);filter:brightness(1.05)}
   var views = Array.prototype.slice.call(document.querySelectorAll('.view'));
   var links = Array.prototype.slice.call(document.querySelectorAll('[data-nav]'));
   var titles = { beranda: 'Tugas Nabila Azzahra', tugas1: 'Tugas 1 – Profil Nabila Azzahra',
-                 tugas2: 'Tugas 2', tugas3: 'Tugas 3', tugas4: 'Tugas 4' };
+                 tugas2: 'Tugas 2 – Formulir & Spreadsheet', tugas3: 'Tugas 3 – Formulir & Spreadsheet', tugas4: 'Tugas 4' };
 
   function show() {
     var id = (location.hash || '#beranda').slice(1);
