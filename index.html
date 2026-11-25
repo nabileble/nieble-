@@ -47,7 +47,7 @@ a{color:var(--accent)}
 .topbar nav a:hover{background:var(--soft)}
 .topbar nav a[aria-current="page"]{background:var(--accent);color:#fff}
 
-/* ===== Halaman (satu file, ganti tampilan lewat menu) ===== */
+/* ===== Halaman ===== */
 .view{display:none}
 .view.active{display:block;animation:fade .35s both}
 @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
@@ -140,28 +140,67 @@ dl.bio dt:last-of-type,dl.bio dd:last-of-type{border-bottom:0}
 .sub{font-size:1.3rem;font-weight:600;margin:28px 0 16px;display:flex;align-items:center;gap:10px}
 .sub:first-of-type{margin-top:0}
 .sub::after{content:"";flex:1;height:2px;background:linear-gradient(90deg,var(--line),transparent)}
-.photos{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.photos{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;align-items:start}
 .videos{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
 figure{
   background:var(--surface);border-radius:18px;padding:10px 10px 0;overflow:hidden;
   border:2px solid var(--line);box-shadow:var(--shadow);transition:transform .3s,box-shadow .3s;
 }
+.photos figure{cursor:zoom-in}
 .photos figure:nth-child(odd){transform:rotate(-1.5deg)}
 .photos figure:nth-child(even){transform:rotate(1.5deg)}
 .photos figure:hover{transform:rotate(0) scale(1.03);box-shadow:0 18px 36px rgba(120,86,40,.25)}
 .videos figure:hover{transform:translateY(-5px)}
+
 figure img,figure video{
-  width:100%;display:block;aspect-ratio:4/3;object-fit:cover;border-radius:12px;background:var(--soft);
+  width:100%;display:block;border-radius:12px;background:var(--soft);object-fit:cover;
 }
-figure video{background:#000}
+.photos figure.landscape img{aspect-ratio:16/9}
+.photos figure.portrait img{aspect-ratio:3/4}
+figure video{aspect-ratio:4/3;background:#000}
 figcaption{padding:12px 6px 14px;text-align:center;font-family:'Fredoka',sans-serif;color:var(--muted)}
 
-/* ===== Tugas 2-3 ===== */
+/* ===== Lightbox (Klik Foto untuk Perbesar) ===== */
+.lightbox{
+  position:fixed;inset:0;z-index:50;background:rgba(30,22,15,.85);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;padding:24px;flex-direction:column;gap:12px;
+}
+.lightbox.open{display:flex}
+.lightbox img{
+  max-width:min(92vw,960px);max-height:80vh;border-radius:16px;
+  box-shadow:0 20px 50px rgba(0,0,0,.45);border:3px solid var(--surface);
+}
+.lightbox p{color:#fffaf0;font-family:'Fredoka',sans-serif;font-size:1.1rem;text-align:center}
+.lightbox button{
+  position:absolute;top:18px;right:22px;background:var(--surface);color:var(--ink);
+  width:42px;height:42px;border-radius:50%;padding:0;font-size:1.3rem;display:grid;place-items:center;
+}
+
+/* ===== Tugas 2-4 ===== */
 .page-title{font-size:clamp(1.8rem,4vw,2.6rem);color:var(--accent);margin-bottom:6px}
 .lead{color:var(--muted);margin-bottom:24px;max-width:62ch}
+label{display:block;font-weight:800;margin:18px 0 6px;color:var(--accent)}
+input[type=text],textarea{
+  width:100%;font:inherit;color:var(--ink);background:#fffdf7;border:2px solid var(--line);
+  border-radius:14px;padding:12px 14px;
+}
+textarea{min-height:240px;resize:vertical}
+input[type=text]:focus,textarea:focus{border-color:var(--accent2);outline:none;box-shadow:0 0 0 4px rgba(217,163,95,.3)}
 .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+button{
+  font:800 1rem 'Nunito',sans-serif;border:0;border-radius:14px;padding:12px 22px;cursor:pointer;
+  transition:transform .15s,filter .2s;
+}
+button:hover{transform:translateY(-2px);filter:brightness(1.05)}
+.btn-main{background:var(--accent);color:#fff}
+.btn-alt{background:var(--soft);color:var(--ink);border:2px solid var(--line)}
+.btn-danger{background:#f3d9cb;color:#7a2e12}
+.status{margin-top:14px;font-weight:700;color:#4d6b2a;min-height:1.6em}
+.saved-title{font:600 1.5rem 'Fredoka',sans-serif;margin-bottom:8px}
+.saved-text{white-space:pre-wrap;overflow-wrap:anywhere}
+.empty{color:var(--muted);font-style:italic}
 
-/* ===== Formulir, Spreadsheet & Looker Studio (Tugas 2 & 3) ===== */
+/* ===== Formulir & Spreadsheet Google (Tugas 2) ===== */
 .form-frame{border-radius:16px;overflow:hidden;border:2px solid var(--line);background:#fff}
 .form-frame iframe{display:block;width:100%;height:min(1100px,80vh);min-height:560px;border:0}
 .btn-link{
@@ -194,8 +233,7 @@ figcaption{padding:12px 6px 14px;text-align:center;font-family:'Fredoka',sans-se
       <a href="#tugas1" data-nav="tugas1">Tugas 1</a>
       <a href="#tugas2" data-nav="tugas2">Tugas 2</a>
       <a href="#tugas3" data-nav="tugas3">Tugas 3</a>
-      <!-- Langsung pindah ke file HTML Tugas 4 -->
-      <a href="tugas4.html">Tugas 4</a>
+      <a href="#tugas4" data-nav="tugas4">Tugas 4</a>
     </nav>
   </div>
 </header>
@@ -225,14 +263,13 @@ figcaption{padding:12px 6px 14px;text-align:center;font-family:'Fredoka',sans-se
       <a class="task" href="#tugas3">
         <div class="num">3</div>
         <h2>Tugas 3</h2>
-        <p>Formulir Google dan data Looker Studio.</p>
+        <p>Halaman yang bisa diisi dan disimpan.</p>
         <span class="go">Buka tugas →</span>
       </a>
-      <!-- Langsung pindah ke file HTML Tugas 4 -->
-      <a class="task" href="tugas4.html">
+      <a class="task" href="#tugas4">
         <div class="num">4</div>
         <h2>Tugas 4</h2>
-        <p>Portal KUB — Hasil Tangkapan Kelompok (Form, Spreadsheet &amp; Dashboard).</p>
+        <p>Halaman yang bisa diisi dan disimpan.</p>
         <span class="go">Buka tugas →</span>
       </a>
     </div>
@@ -245,8 +282,7 @@ figcaption{padding:12px 6px 14px;text-align:center;font-family:'Fredoka',sans-se
 
         <aside class="profile">
           <div class="avatar">
-            <!-- Ganti dengan foto profil: foto/profil.jpg -->
-            <img src="foto/profil.jpg" alt="Foto profil" onerror="this.remove()">
+            <img src="poto nableee.jpeg" alt="Foto profil" onerror="this.remove()">
             <span aria-hidden="true">N</span>
           </div>
           <h1>Nabila Azzahra</h1>
@@ -286,21 +322,21 @@ figcaption{padding:12px 6px 14px;text-align:center;font-family:'Fredoka',sans-se
 
             <h3 class="sub">Foto</h3>
             <div class="photos">
-              <figure>
-                <img src="foto/rumah-samping.jpeg" alt="Tampak samping rumah" loading="lazy">
-                <figcaption>Tampak samping rumah</figcaption>
-              </figure>
-              <figure>
-                <img src="foto/rumah-depan.jpeg" alt="Tampak depan rumah" loading="lazy">
+              <figure class="landscape">
+                <img src="rumah-depan.jpeg" alt="Tampak depan rumah" loading="lazy">
                 <figcaption>Tampak depan rumah</figcaption>
               </figure>
-              <figure>
-                <img src="foto/kamar-1.jpeg" alt="Kamar tidur sisi pintu" loading="lazy">
-                <figcaption>Kamar tidur (sisi pintu)</figcaption>
+              <figure class="landscape">
+                <img src="rumah-samping.jpeg" alt="Suasana halaman samping rumah" loading="lazy">
+                <figcaption>Suasana halaman samping rumah</figcaption>
               </figure>
-              <figure>
-                <img src="foto/kamar-2.jpeg" alt="Kamar tidur sisi jendela" loading="lazy">
-                <figcaption>Kamar tidur (sisi jendela)</figcaption>
+              <figure class="portrait">
+                <img src="kamar-1.jpeg" alt="Suasana kamar tidur" loading="lazy">
+                <figcaption>Suasana kamar tidur</figcaption>
+              </figure>
+              <figure class="portrait">
+                <img src="kamar-2.jpeg" alt="Sudut kamar tidur" loading="lazy">
+                <figcaption>Sudut kamar tidur</figcaption>
               </figure>
             </div>
 
@@ -327,6 +363,7 @@ figcaption{padding:12px 6px 14px;text-align:center;font-family:'Fredoka',sans-se
     <div class="page">
       <h1 class="page-title">Tugas 2</h1>
       <p class="lead">Silakan isi formulir dan lihat spreadsheet di bawah ini. Kalau ada yang tidak tampil, buka lewat tombol "Buka di tab baru".</p>
+
       <section class="card">
         <h2>Formulir</h2>
         <div class="form-frame">
@@ -353,53 +390,134 @@ figcaption{padding:12px 6px 14px;text-align:center;font-family:'Fredoka',sans-se
     </div>
   </div>
 
-  <!-- ================= TUGAS 3 : FORMULIR GOOGLE & LOOKER STUDIO ================= -->
-  <div class="view" id="tugas3">
-    <div class="page">
-      <h1 class="page-title">Tugas 3</h1>
-      <p class="lead">Silakan isi formulir dan lihat tampilan data dari Looker Studio di bawah ini. Kalau ada yang tidak tampil, buka lewat tombol "Buka di tab baru".</p>
-      <section class="card">
-        <h2>Formulir</h2>
-        <div class="form-frame">
-          <iframe
-            src="https://docs.google.com/forms/d/e/1FAIpQLScdTTd__SX86pz2sPiV68AiHYEENOTv_6Qo2_SKuinnrAj-ZQ/viewform?embedded=true"
-            title="Formulir Tugas 3" loading="lazy">Memuat formulir…</iframe>
-        </div>
-        <div class="actions">
-          <a class="btn-link" href="https://docs.google.com/forms/d/e/1FAIpQLScdTTd__SX86pz2sPiV68AiHYEENOTv_6Qo2_SKuinnrAj-ZQ/viewform" target="_blank" rel="noopener">↗ Buka di tab baru</a>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>Data Looker Studio</h2>
-        <div class="form-frame">
-          <iframe
-            src="https://lookerstudio.google.com/embed/reporting/488624d3-9b42-417b-990d-70bb0c6f7fca/page/uU6DG"
-            title="Laporan Looker Studio Tugas 3" loading="lazy" allowfullscreen
-            sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">Memuat laporan…</iframe>
-        </div>
-        <div class="actions">
-          <a class="btn-link" href="https://lookerstudio.google.com/reporting/488624d3-9b42-417b-990d-70bb0c6f7fca/page/uU6DG" target="_blank" rel="noopener">↗ Buka laporan di tab baru</a>
-        </div>
-      </section>
-    </div>
-  </div>
+  <!-- ================= TUGAS 3 & 4 ================= -->
+  <div class="view" id="tugas3" data-form="3"></div>
+  <div class="view" id="tugas4" data-form="4"></div>
 
 </main>
+
+<!-- Lightbox untuk memperbesar foto galeri -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Pratinjau foto">
+  <button type="button" id="lbClose" aria-label="Tutup">✕</button>
+  <img id="lbImg" src="" alt="">
+  <p id="lbCap"></p>
+</div>
 
 <footer>&copy; 2026 Nabila Azzahra</footer>
 
 <script>
 (function () {
+  /* ---------- Lightbox Galeri Foto ---------- */
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lbImg');
+  var lbCap = document.getElementById('lbCap');
+  var lbClose = document.getElementById('lbClose');
+
+  document.querySelectorAll('.photos figure').forEach(function (fig) {
+    fig.addEventListener('click', function () {
+      var img = fig.querySelector('img');
+      var cap = fig.querySelector('figcaption');
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lbCap.textContent = cap ? cap.textContent : '';
+      lb.classList.add('open');
+    });
+  });
+  function closeLb() { lb.classList.remove('open'); }
+  lbClose.addEventListener('click', closeLb);
+  lb.addEventListener('click', function (e) { if (e.target === lb) closeLb(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLb(); });
+
+  /* ---------- Form isi & simpan untuk Tugas 3-4 ---------- */
+  function buildForm(box) {
+    var n = box.getAttribute('data-form');
+    var key = 'tugas' + n;
+    box.innerHTML =
+      '<div class="page">' +
+        '<h1 class="page-title">Tugas ' + n + '</h1>' +
+        '<p class="lead">Isi judul dan isi tugas di bawah, lalu tekan Simpan. Isinya akan tetap ada saat halaman dibuka kembali di browser yang sama.</p>' +
+        '<section class="card">' +
+          '<h2>Isi Tugas</h2>' +
+          '<label for="judul' + n + '">Judul tugas</label>' +
+          '<input type="text" id="judul' + n + '" placeholder="Contoh: Laporan Praktikum">' +
+          '<label for="isi' + n + '">Isi tugas</label>' +
+          '<textarea id="isi' + n + '" placeholder="Tulis isi tugas di sini..."></textarea>' +
+          '<div class="actions">' +
+            '<button type="button" class="btn-main" data-act="simpan">💾 Simpan</button>' +
+            '<button type="button" class="btn-alt" data-act="unduh">📥 Unduh (.txt)</button>' +
+            '<button type="button" class="btn-danger" data-act="hapus">🗑️ Hapus</button>' +
+          '</div>' +
+          '<p class="status" role="status" aria-live="polite"></p>' +
+        '</section>' +
+        '<section class="card"><h2>Hasil Tersimpan</h2><div class="tampil"></div></section>' +
+      '</div>';
+
+    var judul = box.querySelector('input');
+    var isi = box.querySelector('textarea');
+    var status = box.querySelector('.status');
+    var tampil = box.querySelector('.tampil');
+
+    function load() { try { return JSON.parse(localStorage.getItem(key)) || null; } catch (e) { return null; } }
+    function store(d) { try { localStorage.setItem(key, JSON.stringify(d)); return true; } catch (e) { return false; } }
+    function say(m) { status.textContent = m; }
+    function render(d) {
+      tampil.textContent = '';
+      if (!d || (!d.judul && !d.isi)) {
+        var p = document.createElement('p');
+        p.className = 'empty';
+        p.textContent = 'Belum ada isi yang disimpan.';
+        tampil.appendChild(p);
+        return;
+      }
+      var h = document.createElement('div');
+      h.className = 'saved-title';
+      h.textContent = d.judul || '(Tanpa judul)';
+      var t = document.createElement('div');
+      t.className = 'saved-text';
+      t.textContent = d.isi || '';
+      tampil.appendChild(h);
+      tampil.appendChild(t);
+    }
+
+    var saved = load();
+    if (saved) { judul.value = saved.judul || ''; isi.value = saved.isi || ''; }
+    render(saved);
+
+    box.addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-act]');
+      if (!b) return;
+      var act = b.getAttribute('data-act');
+      if (act === 'simpan') {
+        var d = { judul: judul.value.trim(), isi: isi.value };
+        if (store(d)) { render(d); say('✅ Tersimpan di browser ini.'); }
+        else { say('⚠️ Gagal menyimpan. Gunakan tombol Unduh sebagai cadangan.'); }
+      } else if (act === 'hapus') {
+        if (!confirm('Hapus isi tugas ini?')) return;
+        try { localStorage.removeItem(key); } catch (err) {}
+        judul.value = ''; isi.value = '';
+        render(null);
+        say('Isi tugas dihapus.');
+      } else if (act === 'unduh') {
+        var text = (judul.value ? judul.value + '\n\n' : '') + isi.value;
+        var blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = key + '.txt';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(a.href);
+        say('📥 File diunduh.');
+      }
+    });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-form]'), buildForm);
+
   /* ---------- Pindah halaman lewat menu (#beranda, #tugas1, ...) ---------- */
   var views = Array.prototype.slice.call(document.querySelectorAll('.view'));
   var links = Array.prototype.slice.call(document.querySelectorAll('[data-nav]'));
-  var titles = {
-    beranda: 'Tugas Nabila Azzahra',
-    tugas1: 'Tugas 1 – Profil Nabila Azzahra',
-    tugas2: 'Tugas 2 – Formulir & Spreadsheet',
-    tugas3: 'Tugas 3 – Formulir & Looker Studio'
-  };
+  var titles = { beranda: 'Tugas Nabila Azzahra', tugas1: 'Tugas 1 – Profil Nabila Azzahra',
+                 tugas2: 'Tugas 2 – Formulir & Spreadsheet', tugas3: 'Tugas 3', tugas4: 'Tugas 4' };
 
   function show() {
     var id = (location.hash || '#beranda').slice(1);
@@ -417,4 +535,4 @@ figcaption{padding:12px 6px 14px;text-align:center;font-family:'Fredoka',sans-se
 })();
 </script>
 </body>
-</html>
+</html>v
