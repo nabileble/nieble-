@@ -151,9 +151,10 @@ figure{
 .photos figure:hover{transform:rotate(0) scale(1.03);box-shadow:0 18px 36px rgba(120,86,40,.25)}
 .videos figure:hover{transform:translateY(-5px)}
 figure img,figure video{
-  width:100%;display:block;aspect-ratio:4/3;object-fit:cover;border-radius:12px;background:var(--soft);
+  width:100%;display:block;border-radius:12px;background:var(--soft);
 }
-figure video{background:#000}
+figure img{aspect-ratio:4/3;object-fit:cover}
+figure video{aspect-ratio:16/9;object-fit:contain;background:#000}
 figcaption{padding:12px 6px 14px;text-align:center;font-family:'Fredoka',sans-serif;color:var(--muted)}
 
 /* ===== Tugas 2-3 ===== */
@@ -307,13 +308,22 @@ figcaption{padding:12px 6px 14px;text-align:center;font-family:'Fredoka',sans-se
             <h3 class="sub">Video</h3>
             <div class="videos">
               <figure>
-                <video controls preload="metadata"><source src="video1.mp4" type="vid dpn/mp4">Browser Anda tidak mendukung video.</video>
-                <figcaption>video tampak depan</figcaption>
+                <video controls preload="metadata" playsinline>
+                  <source src="video1.mp4" type="video/mp4">
+                  Browser Anda tidak mendukung video.
+                </video>
+                <figcaption>Video tampak depan rumah</figcaption>
               </figure>
+
+              <!-- Jika nanti ingin menambahkan video ke-2, hapus tanda komentar di bawah ini:
               <figure>
-                <video controls preload="metadata"><source src="video2.mp4" type="video depan 2.mp4">Browser Anda tidak mendukung video.</video>
+                <video controls preload="metadata" playsinline>
+                  <source src="video2.mp4" type="video/mp4">
+                  Browser Anda tidak mendukung video.
+                </video>
                 <figcaption>Keterangan video 2</figcaption>
               </figure>
+              -->
             </div>
           </section>
 
