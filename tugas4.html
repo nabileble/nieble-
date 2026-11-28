@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Portal KUB - Sistem Informasi Hasil Tangkapan dan Produksi Kelompok Nelayan" />
+  <title>Portal KUB — Hasil Tangkapan & Produksi Kelompok</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6.5.0 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg: #fbf6ee;
+      --bg-accent: #f3e6d6;
+      --surface: #fffdf9;
+      --surface-glass: rgba(255, 253, 249, 0.85);
+      --primary: #c97a63;        /* Pastel Terracotta / Peach */
+      --primary-hover: #b4654f;
+      --primary-soft: rgba(201, 122, 99, 0.14);
+      --secondary: #6f9c88;      /* Pastel Sage */
+      --secondary-hover: #578370;
+      --secondary-soft: rgba(111, 156, 136, 0.16);
+      --sidebar-bg-1: #f5ecdf;   /* Warm Oat Cream */
+      --sidebar-bg-2: #ede0cf;
+      --text: #3e342c;           /* Warm Espresso */
+      --muted: #7c6f64;          /* Warm Taupe */
+      --border: #eadfce;
+      --warning-bg: #fef7e5;
+      --warning-border: #f3ddab;
+      --warning-text: #9a6318;
+      --shadow-sm: 0 2px 10px rgba(120, 92, 65, 0.05);
+      --shadow-md: 0 12px 30px -8px rgba(120, 92, 65, 0.09);
+      --shadow-lg: 0 18px 36px -12px rgba(180, 125, 95, 0.18);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --sidebar-w: 278px;
+      --sidebar-c: 80px;
+      --transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(at 0% 0%, rgba(242, 189, 165, 0.26) 0px, transparent 48%),
+        radial-gradient(at 100% 0%, rgba(169, 212, 191, 0.26) 0px, transparent 45%),
+        radial-gradient(at 50% 100%, rgba(247, 224, 178, 0.25) 0px, transparent 52%);
+      background-attachment: fixed;
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Layout & Mobile Toggle */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .mobile-toggle {
+      display: none;
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 70;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #6b5a4d;
+      color: #fffdf9;
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: var(--transition);
+    }
+
+    .mobile-toggle:hover {
+      background: var(--primary);
+    }
+
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(62, 52, 44, 0.35);
+      backdrop-filter: blur(4px);
+      z-index: 45;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .sidebar-backdrop.show {
+      display: block;
+      opacity: 1;
+    }
+
+    /* Sidebar (Cream Pastel) */
+    .sidebar {
+      width: var(--sidebar-c);
+      background: linear-gradient(180deg, var(--sidebar-bg-1) 0%, var(--sidebar-bg-2) 100%);
+      color: var(--text);
+      border-right: 1px solid #e4d5c3;
+      position: fixed;
+      inset: 0 auto 0 0;
+      z-index: 50;
+      box-shadow: 4px 0 24px rgba(120, 92, 65, 0.07);
+      overflow-x: hidden;
+      overflow-y: auto;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar.open,
+    .sidebar:hover {
+      width: var(--sidebar-w);
+    }
+
+    .brand {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 20px;
+      background: rgba(255, 253, 249, 0.45);
+      border-bottom: 1px solid #e4d5c3;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #dc9680, #83b09c);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fffdf9;
+      font-size: 18px;
+      box-shadow: 0 4px 12px rgba(201, 122, 99, 0.28);
+    }
+
+    .brand-text {
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .brand-text h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .brand-text span {
+      font-size: 11px;
+      color: var(--muted);
+      display: block;
+    }
+
+    .sidebar.open .brand-text,
+    .sidebar:hover .brand-text {
+      opacity: 1;
+    }
+
+    .sidebar-section-label {
+      padding: 16px 20px 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #978779;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-section-label .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: inline-block;
+    }
+
+    .sidebar-section-label .pill-dot.sage {
+      background: var(--secondary);
+    }
+
+    .sidebar-section-label .pill-dot.indigo {
+      background: #7c6ba8;
+    }
+
+    .sidebar.open .sidebar-section-label,
+    .sidebar:hover .sidebar-section-label {
+      opacity: 1;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: #e2d3c0;
+      margin: 6px 14px;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 4px 12px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .menu-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 11px 14px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #64564a;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: var(--transition);
+      font: inherit;
+      font-size: 13.5px;
+      font-weight: 500;
+      text-align: left;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .menu-btn.sub-item {
+      padding: 9px 14px;
+      font-size: 13px;
+      color: #77685b;
+    }
+
+    .menu-btn i {
+      width: 28px;
+      min-width: 28px;
+      text-align: center;
+      font-size: 16px;
+      transition: transform 0.2s ease;
+    }
+
+    .menu-label {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .sidebar.open .menu-label,
+    .sidebar:hover .menu-label {
+      opacity: 1;
+    }
+
+    .menu-btn:hover {
+      background: rgba(255, 253, 249, 0.65);
+      color: var(--text);
+    }
+
+    .menu-btn:hover i {
+      transform: scale(1.08);
+    }
+
+    .menu-btn.active {
+      background: linear-gradient(135deg, rgba(220, 150, 128, 0.24), rgba(201, 122, 99, 0.14));
+      color: #9a4f3b;
+      font-weight: 600;
+      border: 1px solid rgba(201, 122, 99, 0.34);
+    }
+
+    .menu-btn.active-produksi {
+      background: linear-gradient(135deg, rgba(131, 176, 156, 0.28), rgba(111, 156, 136, 0.16));
+      color: #366551;
+      font-weight: 600;
+      border: 1px solid rgba(111, 156, 136, 0.38);
+    }
+
+    .menu-btn.active-penilaian {
+      background: linear-gradient(135deg, rgba(162, 147, 198, 0.25), rgba(135, 118, 178, 0.14));
+      color: #5a4987;
+      font-weight: 600;
+      border: 1px solid rgba(135, 118, 178, 0.34);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 14px 12px;
+      border-top: 1px solid #e4d5c3;
+    }
+
+    /* Main Content */
+    .main {
+      margin-left: var(--sidebar-c);
+      width: calc(100% - var(--sidebar-c));
+      padding: 24px 28px 40px;
+      transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar.open ~ .main,
+    .sidebar:hover ~ .main {
+      margin-left: var(--sidebar-w);
+      width: calc(100% - var(--sidebar-w));
+    }
+
+    /* Hero / Topbar (Soft Pastel Gradient) */
+    .hero-header {
+      background: linear-gradient(135deg, #f8ece0 0%, #f4dccb 52%, #e3efe7 100%);
+      color: var(--text);
+      border: 1px solid #ead8c7;
+      border-radius: 24px;
+      padding: 28px 30px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      transition: background 0.35s ease;
+    }
+
+    .hero-header.theme-produksi {
+      background: linear-gradient(135deg, #e8f3ec 0%, #d8ebe0 52%, #f3ece0 100%);
+      border-color: #cde0d4;
+    }
+
+    .hero-header::before {
+      content: "";
+      position: absolute;
+      top: -60px;
+      right: -40px;
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(255, 253, 249, 0.65) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255, 253, 249, 0.7);
+      border: 1px solid rgba(201, 122, 99, 0.28);
+      font-size: 12px;
+      font-weight: 600;
+      color: #9a4f3b;
+      margin-bottom: 12px;
+      backdrop-filter: blur(6px);
+    }
+
+    .hero-header.theme-produksi .hero-badge {
+      border-color: rgba(111, 156, 136, 0.35);
+      color: #366551;
+    }
+
+    .hero-badge .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #c97a63;
+      box-shadow: 0 0 8px rgba(201, 122, 99, 0.7);
+      animation: pulse 2s infinite;
+    }
+
+    .hero-header.theme-produksi .hero-badge .dot {
+      background: #5a947b;
+      box-shadow: 0 0 8px rgba(90, 148, 123, 0.7);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    .hero-info h1 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+      line-height: 1.25;
+      color: var(--text);
+    }
+
+    .hero-info p {
+      color: #5f5247;
+      font-size: 14px;
+      max-width: 620px;
+      line-height: 1.6;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 18px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: var(--transition);
+    }
+
+    .btn-glass {
+      background: rgba(255, 253, 249, 0.78);
+      color: var(--text);
+      border-color: rgba(185, 155, 130, 0.35);
+      backdrop-filter: blur(8px);
+    }
+
+    .btn-glass:hover {
+      background: #fffdf9;
+      border-color: var(--primary);
+      color: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Tab Switcher Bar */
+    .tab-bar {
+      background: var(--surface-glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      border-radius: 16px;
+      padding: 8px;
+      margin-bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tab-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 11px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+      background: rgba(201, 122, 99, 0.08);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #c97a63, #b4654f);
+      color: #fffdf9;
+      box-shadow: 0 6px 16px rgba(180, 101, 79, 0.25);
+    }
+
+    .tab-btn.active-produksi {
+      background: linear-gradient(135deg, #6f9c88, #517d6a);
+      color: #fffdf9;
+      box-shadow: 0 6px 16px rgba(81, 125, 106, 0.25);
+    }
+
+    .tab-btn.active-penilaian {
+      background: linear-gradient(135deg, #8b79b5, #6c5b94);
+      color: #fffdf9;
+      box-shadow: 0 6px 16px rgba(108, 91, 148, 0.25);
+    }
+
+    .quick-jumps {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-right: 6px;
+      flex-wrap: wrap;
+    }
+
+    .jump-chip {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      background: #faf3e9;
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .jump-chip:hover {
+      color: var(--primary-hover);
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    /* Cards & Containers */
+    .form-container {
+      display: none;
+      animation: fadeSlideUp 0.35s ease;
+    }
+
+    .form-container.active {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+      padding: 24px;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 16px 36px -10px rgba(120, 92, 65, 0.14);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .card-title-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .card-icon {
+      width: 46px;
+      height: 46px;
+      min-width: 46px;
+      border-radius: 14px;
+      background: rgba(217, 137, 112, 0.16);
+      color: #b5634a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .card-icon.blue {
+      background: rgba(118, 166, 146, 0.18);
+      color: #4d806b;
+    }
+
+    .card-icon.indigo {
+      background: rgba(162, 147, 198, 0.2);
+      color: #6d5c9a;
+    }
+
+    .card-icon.amber {
+      background: rgba(226, 173, 94, 0.2);
+      color: #9e6a1d;
+    }
+
+    .section-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+
+    .btn-outline {
+      background: #faf4eb;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 9px 14px;
+      font-size: 12.5px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary-hover);
+      background: var(--primary-soft);
+      transform: translateY(-1px);
+    }
+
+    /* Iframe Box */
+    .iframe-box {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fbf6ee;
+      position: relative;
+      box-shadow: inset 0 2px 6px rgba(120, 92, 65, 0.04);
+    }
+
+    .iframe-box iframe {
+      width: 100%;
+      height: 640px;
+      border: 0;
+      display: block;
+      background: #fff;
+    }
+
+    .iframe-box.tall iframe {
+      height: 680px;
+    }
+
+    /* Alerts & Notes */
+    .alert-box {
+      margin-top: 14px;
+      padding: 13px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.6;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .alert-box.warning {
+      background: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      color: var(--warning-text);
+    }
+
+    .alert-box.warning a {
+      color: #824e0d;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .alert-box.info {
+      background: #eef6f2;
+      border: 1px solid #cce3d8;
+      color: #3e705b;
+    }
+
+    .alert-box i {
+      margin-top: 3px;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .download-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 16px;
+      padding: 16px 18px;
+      background: #faf4eb;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #6fa38c, #578772);
+      color: #fffdf9;
+      border: none;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 6px 18px rgba(87, 135, 114, 0.25);
+      transition: var(--transition);
+    }
+
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(87, 135, 114, 0.34);
+    }
+
+    /* Footer */
+    .page-footer {
+      margin-top: 32px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12.5px;
+      padding: 12px;
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 900px) {
+      .mobile-toggle {
+        display: flex;
+      }
+
+      .sidebar {
+        transform: translateX(-100%);
+        width: var(--sidebar-w);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .sidebar.open .brand-text,
+      .sidebar.open .menu-label,
+      .sidebar.open .sidebar-section-label {
+        opacity: 1;
+      }
+
+      .main,
+      .sidebar.open ~ .main,
+      .sidebar:hover ~ .main {
+        margin-left: 0;
+        width: 100%;
+        padding: 72px 16px 32px;
+      }
+
+      .hero-header {
+        padding: 22px 20px;
+      }
+
+      .hero-info h1 {
+        font-size: 22px;
+      }
+
+      .tab-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .quick-jumps {
+        padding: 4px 4px 2px;
+      }
+
+      .iframe-box iframe {
+        height: 520px;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .card {
+        padding: 16px;
+        border-radius: 16px;
+      }
+
+      .tab-group {
+        display: grid;
+        grid-template-columns: 1fr;
+        width: 100%;
+      }
+
+      .tab-btn {
+        justify-content: center;
+        padding: 10px 12px;
+        font-size: 13px;
+      }
+
+      .btn-outline,
+      .download-btn,
+      .btn-glass {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .iframe-box iframe {
+        height: 460px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tombol Menu Mobile -->
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Buka Menu" aria-controls="sidebar" aria-expanded="false">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <!-- Backdrop Mobile -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <div class="layout">
+    <!-- Sidebar Navigasi -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-fish-fins"></i>
+        </div>
+        <div class="brand-text">
+          <h2>Portal KUB</h2>
+          <span>Tangkapan &amp; Produksi</span>
+        </div>
+      </div>
+
+      <!-- SIDEBAR 1: HASIL TANGKAPAN -->
+      <div class="sidebar-section-label">
+        <span class="pill-dot"></span> Hasil Tangkapan
+      </div>
+      <ul class="sidebar-menu">
+        <li>
+          <button class="menu-btn active" id="sidePengisian" type="button" onclick="showForm('pengisian')">
+            <i class="fa-solid fa-fish"></i>
+            <span class="menu-label">Hasil Tangkapan</span>
+          </button>
+        </li>
+        <li>
+          <button class="menu-btn sub-item" type="button" onclick="goToSection('pengisian', 'section-form-pengisian')">
+            <i class="fa-solid fa-file-lines"></i>
+            <span class="menu-label">Form Tangkapan</span>
+          </button>
+        </li>
+        <li>
+          <button class="menu-btn sub-item" type="button" onclick="goToSection('pengisian', 'section-spreadsheet-pengisian')">
+            <i class="fa-solid fa-table"></i>
+            <span class="menu-label">Spreadsheet Tangkapan</span>
+          </button>
+        </li>
+        <li>
+          <button class="menu-btn sub-item" type="button" onclick="goToSection('pengisian', 'section-looker-pengisian')">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span class="menu-label">Looker Tangkapan</span>
+          </button>
+        </li>
+      </ul>
+
+      <div class="sidebar-divider"></div>
+
+      <!-- SIDEBAR 2: PRODUKSI KELOMPOK (TERPISAH) -->
+      <div class="sidebar-section-label">
+        <span class="pill-dot sage"></span> Produksi Kelompok
+      </div>
+      <ul class="sidebar-menu">
+        <li>
+          <button class="menu-btn" id="sideProduksi" type="button" onclick="showForm('produksi')">
+            <i class="fa-solid fa-boxes-stacked"></i>
+            <span class="menu-label">Produksi Kelompok</span>
+          </button>
+        </li>
+        <li>
+          <button class="menu-btn sub-item" type="button" onclick="goToSection('produksi', 'section-form-produksi')">
+            <i class="fa-solid fa-pen-to-square"></i>
+            <span class="menu-label">Form Produksi</span>
+          </button>
+        </li>
+        <li>
+          <button class="menu-btn sub-item" type="button" onclick="goToSection('produksi', 'section-spreadsheet-produksi')">
+            <i class="fa-solid fa-table-list"></i>
+            <span class="menu-label">Spreadsheet Produksi</span>
+          </button>
+        </li>
+        <li>
+          <button class="menu-btn sub-item" type="button" onclick="goToSection('produksi', 'section-looker-produksi')">
+            <i class="fa-solid fa-chart-column"></i>
+            <span class="menu-label">Looker Produksi</span>
+          </button>
+        </li>
+      </ul>
+
+      <div class="sidebar-divider"></div>
+
+      <!-- SIDEBAR 3: EVALUASI / PENILAIAN -->
+      <div class="sidebar-section-label">
+        <span class="pill-dot indigo"></span> Evaluasi Sistem
+      </div>
+      <ul class="sidebar-menu">
+        <li>
+          <button class="menu-btn" id="sidePenilaian" type="button" onclick="showForm('penilaian')">
+            <i class="fa-solid fa-clipboard-check"></i>
+            <span class="menu-label">Form Penilaian</span>
+          </button>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <a class="menu-btn" href="https://faroukmuhamad-gif.github.io/DEMO-TUGAS/">
+          <i class="fa-solid fa-house"></i>
+          <span class="menu-label">Kembali ke Beranda</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Konten Utama -->
+    <main class="main">
+      <!-- Hero Banner -->
+      <header class="hero-header" id="heroHeader">
+        <div class="hero-info">
+          <div class="hero-badge" id="heroBadge">
+            <span class="dot"></span>
+            Sistem Terintegrasi • Live Spreadsheet &amp; Dashboard
+          </div>
+          <h1 id="heroTitle">Hasil Tangkapan Kelompok (KUB)</h1>
+          <p id="heroDesc">
+            Portal pengisian data hasil tangkapan kelompok, sajian data spreadsheet secara real-time, form penilaian, serta visualisasi analisis Looker Studio.
+          </p>
+        </div>
+        <div class="top-actions">
+          <a class="btn btn-glass" href="https://faroukmuhamad-gif.github.io/DEMO-TUGAS/">
+            <i class="fa-solid fa-house"></i> Beranda Utama
+          </a>
+        </div>
+      </header>
+
+      <!-- Tab Switcher & Pintasan -->
+      <div class="tab-bar">
+        <div class="tab-group" role="tablist">
+          <button class="tab-btn active" id="tabPengisian" type="button" onclick="showForm('pengisian')" role="tab" aria-selected="true">
+            <i class="fa-solid fa-fish"></i> Hasil Tangkapan
+          </button>
+          <button class="tab-btn" id="tabProduksi" type="button" onclick="showForm('produksi')" role="tab" aria-selected="false">
+            <i class="fa-solid fa-boxes-stacked"></i> Produksi Kelompok
+          </button>
+          <button class="tab-btn" id="tabPenilaian" type="button" onclick="showForm('penilaian')" role="tab" aria-selected="false">
+            <i class="fa-solid fa-clipboard-check"></i> Form Penilaian
+          </button>
+        </div>
+
+        <div class="quick-jumps" id="quickJumps">
+          <a class="jump-chip" href="#section-form-pengisian"><i class="fa-regular fa-rectangle-list"></i> Form</a>
+          <a class="jump-chip" href="#section-spreadsheet-pengisian"><i class="fa-solid fa-table"></i> Spreadsheet</a>
+          <a class="jump-chip" href="#section-looker-pengisian"><i class="fa-solid fa-chart-column"></i> Dashboard</a>
+        </div>
+      </div>
+
+      <!-- ================= CONTAINER 1: HASIL TANGKAPAN KELOMPOK ================= -->
+      <section id="formPengisian" class="form-container active">
+
+        <!-- 1. Google Form Pengisian -->
+        <article class="card" id="section-form-pengisian">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <div class="card-icon">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </div>
+              <div>
+                <h2 class="section-title">Form Pengisian Hasil Tangkapan</h2>
+                <p class="section-desc">
+                  Silakan lengkapi formulir di bawah ini dengan data hasil tangkapan kelompok Anda. Dapat diakses dengan akun Google apa saja.
+                </p>
+              </div>
+            </div>
+            <a
+              class="btn btn-outline"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSdCYiSd3YuoI_j1wSu5O-WY2GZQSimDw6AFsWO1fVWCGcKK1g/viewform?usp=dialog"
+              target="_blank"
+              rel="noopener noreferrer">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka di Tab Baru
+            </a>
+          </div>
+
+          <div class="iframe-box tall">
+            <iframe
+              src="https://docs.google.com/forms/d/e/1FAIpQLSdCYiSd3YuoI_j1wSu5O-WY2GZQSimDw6AFsWO1fVWCGcKK1g/viewform?embedded=true"
+              title="Form Pengisian Hasil Tangkapan"
+              loading="lazy">
+              Memuat formulir...
+            </iframe>
+          </div>
+
+          <div class="alert-box warning">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <div>
+              Jika formulir tidak tampil di layar,
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLSdCYiSd3YuoI_j1wSu5O-WY2GZQSimDw6AFsWO1fVWCGcKK1g/viewform?usp=dialog" target="_blank" rel="noopener noreferrer">
+                klik di sini untuk membuka Google Form di tab baru
+              </a>.
+            </div>
+          </div>
+
+          <div class="alert-box info">
+            <i class="fa-solid fa-circle-info"></i>
+            <div>
+              <strong>Tips Pengisian:</strong> Jika menggunakan ponsel dan tampilan terasa sempit, gunakan tombol <em>"Buka di Tab Baru"</em> di pojok kanan atas kartu untuk pengalaman pengisian layar penuh.
+            </div>
+          </div>
+        </article>
+
+        <!-- 2. Spreadsheet Hasil Pengisian -->
+        <article class="card" id="section-spreadsheet-pengisian">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <div class="card-icon blue">
+                <i class="fa-solid fa-table"></i>
+              </div>
+              <div>
+                <h2 class="section-title">Sajian Data Spreadsheet Hasil Tangkapan</h2>
+                <p class="section-desc">
+                  Rekapitulasi data hasil pengisian formulir yang tersinkronisasi secara otomatis melalui Google Sheets.
+                </p>
+              </div>
+            </div>
+            <a
+              class="btn btn-outline"
+              href="https://docs.google.com/spreadsheets/d/e/2PACX-1vS6T4dKZaicHJD3ctZCKxOu-8UVVZtKzLoYvgh5NzE3No4Yd_KzZKo1XUXCNylCEPzXPCb5paM1tTEI/pubhtml?widget=true&headers=false"
+              target="_blank"
+              rel="noopener noreferrer">
+              <i class="fa-solid fa-expand"></i> Layar Penuh
+            </a>
+          </div>
+
+          <div class="iframe-box">
+            <iframe
+              src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS6T4dKZaicHJD3ctZCKxOu-8UVVZtKzLoYvgh5NzE3No4Yd_KzZKo1XUXCNylCEPzXPCb5paM1tTEI/pubhtml?widget=true&amp;headers=false"
+              title="Spreadsheet Hasil Tangkapan Kelompok"
+              loading="lazy">
+              Memuat spreadsheet...
+            </iframe>
+          </div>
+        </article>
+
+        <!-- 3. Looker Studio Pengisian -->
+        <article class="card" id="section-looker-pengisian">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <div class="card-icon indigo">
+                <i class="fa-solid fa-chart-pie"></i>
+              </div>
+              <div>
+                <h2 class="section-title">Dashboard Looker Studio — Hasil Tangkapan</h2>
+                <p class="section-desc">
+                  Visualisasi interaktif dan analisis ringkasan data hasil tangkapan kelompok.
+                </p>
+              </div>
+            </div>
+            <a
+              class="btn btn-outline"
+              href="https://datastudio.google.com/reporting/bfebb953-8a25-463f-a6be-b55401c609bc"
+              target="_blank"
+              rel="noopener noreferrer">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Dashboard
+            </a>
+          </div>
+
+          <div class="iframe-box">
+            <iframe
+              src="https://datastudio.google.com/embed/reporting/bfebb953-8a25-463f-a6be-b55401c609bc"
+              title="Dashboard Looker Studio Pengisian"
+              loading="lazy"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </article>
+
+      </section>
+
+      <!-- ================= CONTAINER 2: PRODUKSI KELOMPOK ================= -->
+      <section id="formProduksi" class="form-container">
+
+        <!-- 1. Google Form Produksi Kelompok -->
+        <article class="card" id="section-form-produksi">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <div class="card-icon blue">
+                <i class="fa-solid fa-boxes-stacked"></i>
+              </div>
+              <div>
+                <h2 class="section-title">Form Pengisian Produksi Kelompok</h2>
+                <p class="section-desc">
+                  Silakan lengkapi formulir di bawah ini untuk mencatat data produksi kelompok. Data akan otomatis tercatat ke spreadsheet.
+                </p>
+              </div>
+            </div>
+            <a
+              class="btn btn-outline"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSf1ZYJs8QS5TOAEomAU_lnkpiiSwEr1Mbu4bAlEeeYpGtEhuw/viewform?usp=dialog"
+              target="_blank"
+              rel="noopener noreferrer">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka di Tab Baru
+            </a>
+          </div>
+
+          <div class="iframe-box tall">
+            <iframe
+              src="https://docs.google.com/forms/d/e/1FAIpQLSf1ZYJs8QS5TOAEomAU_lnkpiiSwEr1Mbu4bAlEeeYpGtEhuw/viewform?embedded=true"
+              title="Form Pengisian Produksi Kelompok"
+              loading="lazy">
+              Memuat formulir produksi...
+            </iframe>
+          </div>
+
+          <div class="alert-box warning">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <div>
+              Jika formulir produksi tidak tampil di layar,
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLSf1ZYJs8QS5TOAEomAU_lnkpiiSwEr1Mbu4bAlEeeYpGtEhuw/viewform?usp=dialog" target="_blank" rel="noopener noreferrer">
+                klik di sini untuk membuka Google Form Produksi di tab baru
+              </a>.
+            </div>
+          </div>
+
+          <div class="alert-box info">
+            <i class="fa-solid fa-circle-info"></i>
+            <div>
+              <strong>Info Produksi Kelompok:</strong> Pastikan jumlah, jenis produksi, serta tanggal pencatatan diisi dengan benar sebelum menekan tombol kirim.
+            </div>
+          </div>
+        </article>
+
+        <!-- 2. Sajian Data Spreadsheet Produksi Kelompok -->
+        <article class="card" id="section-spreadsheet-produksi">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <div class="card-icon amber">
+                <i class="fa-solid fa-table-list"></i>
+              </div>
+              <div>
+                <h2 class="section-title">Sajian Data Spreadsheet Produksi Kelompok</h2>
+                <p class="section-desc">
+                  Tampilan langsung data Google Sheets hasil pencatatan produksi kelompok secara real-time.
+                </p>
+              </div>
+            </div>
+            <a
+              class="btn btn-outline"
+              href="https://docs.google.com/spreadsheets/d/e/2PACX-1vRzOPzymq8HLNvhH0X-_OFa_aEBfrz-4htYPL4k3OIxwfpZvxSCN1_bt5t5jveDfdCelRJsCpnmkakf/pubhtml"
+              target="_blank"
+              rel="noopener noreferrer">
+              <i class="fa-solid fa-expand"></i> Layar Penuh
+            </a>
+          </div>
+
+          <div class="iframe-box">
+            <iframe
+              src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRzOPzymq8HLNvhH0X-_OFa_aEBfrz-4htYPL4k3OIxwfpZvxSCN1_bt5t5jveDfdCelRJsCpnmkakf/pubhtml"
+              title="Spreadsheet Produksi Kelompok"
+              loading="lazy">
+              Memuat spreadsheet produksi...
+            </iframe>
+          </div>
+        </article>
+
+        <!-- 3. Tampilan Langsung Looker Studio Produksi Kelompok -->
+        <article class="card" id="section-looker-produksi">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <div class="card-icon indigo">
+                <i class="fa-solid fa-chart-column"></i>
+              </div>
+              <div>
+                <h2 class="section-title">Dashboard Looker Studio — Produksi Kelompok</h2>
+                <p class="section-desc">
+                  Tampilan visualisasi interaktif dan grafik laporan produksi kelompok langsung dari Looker Studio.
+                </p>
+              </div>
+            </div>
+            <a
+              class="btn btn-outline"
+              href="https://datastudio.google.com/reporting/613d99bb-22a8-462a-ba0a-652dbcd96eb2/page/page_12345"
+              target="_blank"
+              rel="noopener noreferrer">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Dashboard
+            </a>
+          </div>
+
+          <div class="iframe-box">
+            <iframe
+              src="https://datastudio.google.com/embed/reporting/613d99bb-22a8-462a-ba0a-652dbcd96eb2/page/page_12345"
+              title="Dashboard Looker Studio Produksi Kelompok"
+              loading="lazy"
+              allowfullscreen
+              sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
+            </iframe>
+          </div>
+        </article>
+
+      </section>
+
+      <!-- ================= CONTAINER 3: FORM PENILAIAN ================= -->
+      <section id="formPenilaian" class="form-container">
+
+        <!-- 1. Google Form Penilaian -->
+        <article class="card" id="section-form-penilaian">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <div class="card-icon">
+                <i class="fa-solid fa-clipboard-check"></i>
+              </div>
+              <div>
+                <h2 class="section-title">Form Penilaian &amp; Kepuasan Sistem</h2>
+                <p class="section-desc">
+                  Isi formulir berikut untuk memberikan penilaian terhadap hasil tangkapan, produksi, maupun kinerja sistem.
+                </p>
+              </div>
+            </div>
+            <a
+              class="btn btn-outline"
+              href="https://docs.google.com/forms/d/e/1FAIpQLScZzLRtfK3fIkpcFp5jZD0Cs8HIzr7WxB69xmRA2AFO_ZmqTg/viewform?usp=dialog"
+              target="_blank"
+              rel="noopener noreferrer">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka di Tab Baru
+            </a>
+          </div>
+
+          <div class="iframe-box tall">
+            <iframe
+              src="https://docs.google.com/forms/d/e/1FAIpQLScZzLRtfK3fIkpcFp5jZD0Cs8HIzr7WxB69xmRA2AFO_ZmqTg/viewform?embedded=true"
+              title="Form Penilaian"
+              loading="lazy">
+            </iframe>
+          </div>
+
+          <div class="alert-box warning">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <div>
+              Jika formulir tidak muncul di iframe,
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLScZzLRtfK3fIkpcFp5jZD0Cs8HIzr7WxB69xmRA2AFO_ZmqTg/viewform?usp=dialog" target="_blank" rel="noopener noreferrer">
+                klik di sini untuk membuka Form Penilaian di tab baru
+              </a>.
+            </div>
+          </div>
+        </article>
+
+        <!-- 2. Spreadsheet Penilaian & Unduh XLSX -->
+        <article class="card" id="section-spreadsheet-penilaian">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <div class="card-icon blue">
+                <i class="fa-solid fa-file-excel"></i>
+              </div>
+              <div>
+                <h2 class="section-title">Spreadsheet Hasil Penilaian &amp; Unduh File</h2>
+                <p class="section-desc">
+                  Data hasil form penilaian dan dokumen analisis dalam format Microsoft Excel (.xlsx).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="iframe-box">
+            <iframe
+              src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS6T4dKZaicHJD3ctZCKxOu-8UVVZtKzLoYvgh5NzE3No4Yd_KzZKo1XUXCNylCEPzXPCb5paM1tTEI/pubhtml?widget=true&amp;headers=false"
+              title="Spreadsheet Hasil Form Penilaian"
+              loading="lazy">
+            </iframe>
+          </div>
+
+          <div class="download-row">
+            <div class="section-desc" style="margin:0;">
+              <strong>Unduh Laporan Excel:</strong> Pastikan file <code>AnalisisKepuasanSistem.xlsx</code> berada di folder yang sama dengan file HTML ini.
+            </div>
+            <a
+              class="download-btn"
+              href="AnalisisKepuasanSistem.xlsx"
+              download="AnalisisKepuasanSistem.xlsx">
+              <i class="fa-solid fa-download"></i>
+              Download File XLSX
+            </a>
+          </div>
+        </article>
+
+        <!-- 3. Looker Studio Penilaian -->
+        <article class="card" id="section-looker-penilaian">
+          <div class="card-header">
+            <div class="card-title-wrap">
+              <div class="card-icon indigo">
+                <i class="fa-solid fa-chart-line"></i>
+              </div>
+              <div>
+                <h2 class="section-title">Dashboard Looker Studio — Penilaian</h2>
+                <p class="section-desc">
+                  Dashboard analisis hasil form penilaian dalam bentuk visualisasi dan ringkasan data.
+                </p>
+              </div>
+            </div>
+            <a
+              class="btn btn-outline"
+              href="https://datastudio.google.com/embed/reporting/49979d51-35cd-4f3b-a627-2b5fe30343ac/page/9IN2F"
+              target="_blank"
+              rel="noopener noreferrer">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Dashboard
+            </a>
+          </div>
+
+          <div class="iframe-box">
+            <iframe
+              src="https://datastudio.google.com/embed/reporting/49979d51-35cd-4f3b-a627-2b5fe30343ac/page/9IN2F"
+              title="Dashboard Looker Studio Penilaian"
+              loading="lazy"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </article>
+
+      </section>
+
+      <footer class="page-footer">
+        &copy; 2026 Portal KUB — Sistem Informasi Hasil Tangkapan &amp; Produksi Kelompok.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const mobileToggle = document.getElementById('mobileToggle');
+    const backdrop = document.getElementById('sidebarBackdrop');
+
+    const heroConfig = {
+      pengisian: {
+        title: 'Hasil Tangkapan Kelompok (KUB)',
+        desc: 'Portal pengisian data hasil tangkapan kelompok, sajian data spreadsheet secara real-time, serta visualisasi analisis Looker Studio.',
+        badge: 'Hasil Tangkapan • Live Spreadsheet & Dashboard',
+        themeProduksi: false,
+        jumps: [
+          { href: '#section-form-pengisian', icon: 'fa-regular fa-rectangle-list', label: 'Form Tangkapan' },
+          { href: '#section-spreadsheet-pengisian', icon: 'fa-solid fa-table', label: 'Spreadsheet' },
+          { href: '#section-looker-pengisian', icon: 'fa-solid fa-chart-column', label: 'Dashboard' }
+        ]
+      },
+      produksi: {
+        title: 'Produksi Kelompok (KUB)',
+        desc: 'Portal pencatatan produksi kelompok, sajian data spreadsheet produksi langsung secara real-time, serta tampilan dashboard Looker Studio.',
+        badge: 'Produksi Kelompok • Live Spreadsheet & Dashboard',
+        themeProduksi: true,
+        jumps: [
+          { href: '#section-form-produksi', icon: 'fa-regular fa-rectangle-list', label: 'Form Produksi' },
+          { href: '#section-spreadsheet-produksi', icon: 'fa-solid fa-table-list', label: 'Spreadsheet Produksi' },
+          { href: '#section-looker-produksi', icon: 'fa-solid fa-chart-column', label: 'Looker Produksi' }
+        ]
+      },
+      penilaian: {
+        title: 'Penilaian & Kepuasan Sistem (KUB)',
+        desc: 'Formulir penilaian kinerja dan kepuasan sistem, data spreadsheet hasil evaluasi, unduhan Excel, serta dashboard Looker Studio.',
+        badge: 'Evaluasi Sistem • Penilaian & Analisis',
+        themeProduksi: false,
+        jumps: [
+          { href: '#section-form-penilaian', icon: 'fa-solid fa-clipboard-check', label: 'Form Penilaian' },
+          { href: '#section-spreadsheet-penilaian', icon: 'fa-solid fa-file-excel', label: 'Spreadsheet & XLSX' },
+          { href: '#section-looker-penilaian', icon: 'fa-solid fa-chart-line', label: 'Looker Penilaian' }
+        ]
+      }
+    };
+
+    function setSidebarState(open) {
+      sidebar.classList.toggle('open', open);
+      backdrop.classList.toggle('show', open);
+      mobileToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      mobileToggle.innerHTML = open
+        ? '<i class="fa-solid fa-xmark"></i>'
+        : '<i class="fa-solid fa-bars"></i>';
+    }
+
+    mobileToggle.addEventListener('click', () => {
+      setSidebarState(!sidebar.classList.contains('open'));
+    });
+
+    backdrop.addEventListener('click', () => {
+      setSidebarState(false);
+    });
+
+    function showForm(type) {
+      const formPengisian = document.getElementById('formPengisian');
+      const formProduksi = document.getElementById('formProduksi');
+      const formPenilaian = document.getElementById('formPenilaian');
+
+      const tabPengisian = document.getElementById('tabPengisian');
+      const tabProduksi = document.getElementById('tabProduksi');
+      const tabPenilaian = document.getElementById('tabPenilaian');
+
+      const sidePengisian = document.getElementById('sidePengisian');
+      const sideProduksi = document.getElementById('sideProduksi');
+      const sidePenilaian = document.getElementById('sidePenilaian');
+
+      const heroHeader = document.getElementById('heroHeader');
+      const heroTitle = document.getElementById('heroTitle');
+      const heroDesc = document.getElementById('heroDesc');
+      const heroBadge = document.getElementById('heroBadge');
+      const quickJumps = document.getElementById('quickJumps');
+
+      const isPengisian = type === 'pengisian';
+      const isProduksi = type === 'produksi';
+      const isPenilaian = type === 'penilaian';
+
+      formPengisian.classList.toggle('active', isPengisian);
+      formProduksi.classList.toggle('active', isProduksi);
+      formPenilaian.classList.toggle('active', isPenilaian);
+
+      tabPengisian.className = isPengisian ? 'tab-btn active' : 'tab-btn';
+      tabProduksi.className = isProduksi ? 'tab-btn active-produksi' : 'tab-btn';
+      tabPenilaian.className = isPenilaian ? 'tab-btn active-penilaian' : 'tab-btn';
+
+      tabPengisian.setAttribute('aria-selected', isPengisian ? 'true' : 'false');
+      tabProduksi.setAttribute('aria-selected', isProduksi ? 'true' : 'false');
+      tabPenilaian.setAttribute('aria-selected', isPenilaian ? 'true' : 'false');
+
+      sidePengisian.className = isPengisian ? 'menu-btn active' : 'menu-btn';
+      sideProduksi.className = isProduksi ? 'menu-btn active-produksi' : 'menu-btn';
+      sidePenilaian.className = isPenilaian ? 'menu-btn active-penilaian' : 'menu-btn';
+
+      const cfg = heroConfig[type] || heroConfig.pengisian;
+      heroTitle.textContent = cfg.title;
+      heroDesc.textContent = cfg.desc;
+      heroBadge.innerHTML = `<span class="dot"></span> ${cfg.badge}`;
+      heroHeader.classList.toggle('theme-produksi', cfg.themeProduksi);
+
+      quickJumps.innerHTML = cfg.jumps
+        .map(j => `<a class="jump-chip" href="${j.href}"><i class="${j.icon}"></i> ${j.label}</a>`)
+        .join('');
+
+      if (window.innerWidth <= 900) {
+        setSidebarState(false);
+      }
+    }
+
+    function goToSection(type, sectionId) {
+      showForm(type);
+      if (sectionId) {
+        requestAnimationFrame(() => {
+          const target = document.getElementById(sectionId);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      }
+    }
+  </script>
+</body>
+</html>
